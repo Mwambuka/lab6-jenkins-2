@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-petclinic
+  namespace: default
+  labels:
+    app: spring-petclinic
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: spring-petclinic
+  template:
+    metadata:
+      labels:
+        app: spring-petclinic
+        version: v1
+    spec:
+      containers:
+      - name: spring-petclinic
+        image: bertinmwambuka/spring-petclinic:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        livenessProbe:
+          httpGet: { path: /actuator/health, port: 8080 }
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet: { path: /actuator/health, port: 8080 }
+          initialDelaySeconds: 30
+          periodSeconds: 5
