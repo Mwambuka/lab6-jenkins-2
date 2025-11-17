@@ -5,7 +5,6 @@ metadata:
   namespace: default
   labels:
     app: spring-petclinic
-    version: v1
 spec:
   replicas: 2
   strategy:
@@ -20,7 +19,6 @@ spec:
     metadata:
       labels:
         app: spring-petclinic
-        version: v1
     spec:
       containers:
       - name: spring-petclinic
@@ -28,12 +26,13 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
-          name: http
         livenessProbe:
-          httpGet: { path: /actuator/health, port: 8080 }
+          httpGet:
+            path: /actuator/health
+            port: 8080
           initialDelaySeconds: 60
-          periodSeconds: 10
         readinessProbe:
-          httpGet: { path: /actuator/health, port: 8080 }
+          httpGet:
+            path: /actuator/health
+            port: 8080
           initialDelaySeconds: 30
-          periodSeconds: 5
